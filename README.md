@@ -35,21 +35,6 @@ A ferramenta foi desenhada para preencher **somente as células vazias** nos ane
 
 ## 🏗️ Arquitetura da Solução
 
-### 🔄 Fluxo de Execução
-
-
-graph TD
-    A[📂 Início] --> B[Abre Arquivos Origem/Destino]
-    B --> C{🔍 Varredura dos Anexos}
-    C --> D[Verifica Célula Destino]
-    D -- Célula Vazia? --> E[✅ Copia Dado]
-    D -- Célula Cheia? --> F[🚫 Pula (Não Sobrescreve)]
-    E & F --> G{Mais Células?}
-    G -- Sim --> D
-    G -- Não --> H[📝 Log e Debug]
-    H --> I[💾 Salva e Fecha]
-```
-
 1. **📂 Abertura**: Abre arquivo de origem e destino.
 2. **🔍 Varredura**: Percorre cada anexo configurado.
 3. **✅ Validação**: Verifica se a célula de destino está vazia.
