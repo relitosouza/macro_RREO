@@ -13,19 +13,12 @@ Evita sobrescrever valores já preenchidos no arquivo oficial do RREO.
 Inclui intervalos específicos de linhas e colunas para:
 
 RREO-Anexo 01
-
 RREO-Anexo 02
-
 RREO-Anexo 03
-
 RREO-Anexo 04
-
 RREO-Anexo 06
-
 RREO-Anexo 07
-
 RREO-Anexo 13
-
 RREO-Anexo 14
 
 🧠 Lógica flexível e expansível
@@ -37,49 +30,33 @@ Pode rodar sem abrir o Excel visualmente.
 📂 Estrutura Geral da Macro
 A macro:
 
-Abre o arquivo de origem (planilha_auditoria.xls)
-
-Abre o arquivo de destino (SICONFI_RREO...BASE.xls)
-
-Varre cada anexo configurado
-
-Copia dados somente se a célula destino estiver vazia
-
-Registra erros básicos no Debug
-
-Salva e fecha o arquivo base
+1.Abre o arquivo de origem (planilha_auditoria.xls)
+2.Abre o arquivo de destino (SICONFI_RREO...BASE.xls)
+3.Varre cada anexo configurado
+4.Copia dados somente se a célula destino estiver vazia
+5.Registra erros básicos no Debug
+6.Salva e fecha o arquivo base
 
 🛠️ Como usar
-Abra o Excel
-
-Pressione ALT + F11
-
-Insira um novo módulo
-
-Cole o conteúdo da macro
-
-Ajuste o nome do arquivo base caso necessário
-
-Execute Importar_RREO
+1.Abra o Excel
+2.Pressione ALT + F11
+3.Insira um novo módulo
+4.Cole o conteúdo da macro
+5.Ajuste o nome do arquivo base caso necessário
+6.Execute Importar_RREO
 
 ⚠ Não inclua caminhos completos — a macro assume que os arquivos estão na mesma pasta onde ela está sendo executada.
 
 📌 Observações Importantes
 A macro não sobrescreve células preenchidas
-
 Necessário habilitar macros no Excel
-
 Arquivos devem estar na mesma pasta que a macro, conforme solicitado
-
 Projetada para arquivos .xls e .xlsx
 
 🧩 Melhorias Futuras (sugestões)
 Registro de logs em arquivo .txt
-
 Mensagens amigáveis ao usuário
-
 Interface simples com UserForm
-
 Otimização para milhares de células
 
 📄 Licença
