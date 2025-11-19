@@ -37,7 +37,7 @@ A ferramenta foi desenhada para preencher **somente as células vazias** nos ane
 
 ### 🔄 Fluxo de Execução
 
-```mermaid
+
 graph TD
     A[📂 Início] --> B[Abre Arquivos Origem/Destino]
     B --> C{🔍 Varredura dos Anexos}
