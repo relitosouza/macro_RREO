@@ -6,7 +6,6 @@ Este projeto contém uma macro VBA desenvolvida para automatizar a importação 
 A automação evita sobrescritas indevidas, reduz erros manuais e acelera significativamente o processo de conferência e consolidação dos dados.
 
 🚀 Funcionalidades Principais
-
 🔄 Copia dados apenas para células vazias
 Evita sobrescrever valores já preenchidos no arquivo oficial do RREO.
 
@@ -36,12 +35,11 @@ Os intervalos de cada anexo são configurados em um único bloco, facilitando ma
 Pode rodar sem abrir o Excel visualmente.
 
 📂 Estrutura Geral da Macro
-
 A macro:
 
 Abre o arquivo de origem (planilha_auditoria.xls)
 
-Abre o arquivo de destino (SICONFI_RREO...BASE.xls_)
+Abre o arquivo de destino (SICONFI_RREO...BASE.xls)
 
 Varre cada anexo configurado
 
@@ -51,9 +49,7 @@ Registra erros básicos no Debug
 
 Salva e fecha o arquivo base
 
-
 🛠️ Como usar
-
 Abra o Excel
 
 Pressione ALT + F11
@@ -69,17 +65,15 @@ Execute Importar_RREO
 ⚠ Não inclua caminhos completos — a macro assume que os arquivos estão na mesma pasta onde ela está sendo executada.
 
 📌 Observações Importantes
+A macro não sobrescreve células preenchidas
 
-A macro não sobrescreve células preenchidas.
+Necessário habilitar macros no Excel
 
-Necessário habilitar macros no Excel.
+Arquivos devem estar na mesma pasta que a macro, conforme solicitado
 
-Arquivos devem estar na mesma pasta que a macro, conforme solicitado.
-
-Projetada para arquivos .xls e .xlsx.
+Projetada para arquivos .xls e .xlsx
 
 🧩 Melhorias Futuras (sugestões)
-
 Registro de logs em arquivo .txt
 
 Mensagens amigáveis ao usuário
@@ -89,5 +83,4 @@ Interface simples com UserForm
 Otimização para milhares de células
 
 📄 Licença
-
 Este projeto pode ser reutilizado livremente dentro de órgãos públicos, controladorias, secretarias municipais, etc.
