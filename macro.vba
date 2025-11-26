@@ -1,134 +1,159 @@
-Sub CopiarRREO()
-    Dim wbOrigem As Workbook, wbDestino As Workbook
+Sub UnificarMacroRREO()
     Dim caminhoOrigem As String
+    caminhoOrigem = "C:\caminho\para\planilha_auditoria.xls" ' <<< AJUSTE AQUI O CAMINHO CORRETO, depois delete essa frase>>>
 
-    caminhoOrigem = "C:\caminho\planilha_auditoria.xls" ' <<< AJUSTE O CAMINHO AQUI
-
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-
-    Set wbDestino = ThisWorkbook
-    Set wbOrigem = Workbooks.Open(caminhoOrigem)
-
-    ' === Cópia por Anexo ===
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 01", Array( _
-        Array("B:D,E,H:I,L", 21, 98), _
-        Array("B:D,E,G:H,J:K", 107, 129), _
-        Array("B:D,F", 139, 201), _
-        Array("B:D,E,G:H,J:K", 210, 219) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 02", Array( _
-        Array("B:E,H:I,L", 19, 212), _
-        Array("B:E,H:I,L", 221, 413) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 03", Array( _
-        Array("B:O", 21, 55) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 04", Array( _
-        Array("B:C", 20, 42), _
-        Array("B:F", 51, 58), _
-        Array("B:B", 67, 67), _
-        Array("B:B", 76, 76), _
-        Array("B:B", 85, 88), _
-        Array("B:B", 97, 99), _
-        Array("B:C", 108, 129), _
-        Array("B:F", 138, 145), _
-        Array("B:B", 154, 155), _
-        Array("B:B", 164, 166), _
-        Array("B:C", 175, 176), _
-        Array("B:F", 185, 190), _
-        Array("B:B", 199, 201), _
-        Array("B:C", 210, 212), _
-        Array("B:F", 221, 225) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 06", Array( _
-        Array("B:C", 21, 63), _
-        Array("B:H", 74, 94), _
-        Array("B:C", 103, 104), _
-        Array("B:B", 113, 113), _
-        Array("B:B", 122, 123), _
-        Array("B:B", 132, 132), _
-        Array("B:C", 141, 148), _
-        Array("B:B", 157, 157), _
-        Array("B:B", 166, 166), _
-        Array("B:B", 175, 181), _
-        Array("B:B", 190, 190), _
-        Array("B:B", 199, 202) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 07", Array( _
-        Array("B:M", 22, 28), _
-        Array("B:M", 39, 43) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 13", Array( _
-        Array("B:B", 22, 30), _
-        Array("B:L", 67, 72) _
-    )
-
-    CopiarIntervalos wbOrigem, wbDestino, "RREO-Anexo 14", Array( _
-        Array("B:B", 20, 32), _
-        Array("B:B", 41, 42), _
-        Array("B:B", 51, 53), _
-        Array("B:B", 62, 73), _
-        Array("B:D", 82, 83), _
-        Array("B:E", 92, 103), _
-        Array("B:D", 114, 117), _
-        Array("B:C", 126, 127), _
-        Array("B:E", 136, 142), _
-        Array("B:C", 152, 153), _
-        Array("B:D", 163, 163), _
-        Array("B:B", 172, 172) _
-    )
-
-    wbOrigem.Close SaveChanges:=False
-
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-
-    MsgBox "Cópia concluída com sucesso!", vbInformation
-End Sub
-
-Sub CopiarIntervalos(wbOrigem As Workbook, wbDestino As Workbook, nomeAba As String, intervalos As Variant)
-    Dim i As Integer
-    Dim cols As String, linInicio As Long, linFim As Long
-    Dim subCol As Variant, colStr As String
-    Dim wsOrigem As Worksheet, wsDestino As Worksheet
-    Dim rngOrigem As Range, cel As Range
-
+    ' Abrir a planilha de origem
+    Dim wbOrigem As Workbook
     On Error Resume Next
-    Set wsOrigem = wbOrigem.Sheets(nomeAba)
-    Set wsDestino = wbDestino.Sheets(nomeAba)
-    On Error GoTo 0
-
-    If wsOrigem Is Nothing Or wsDestino Is Nothing Then
-        MsgBox "Aba '" & nomeAba & "' não encontrada em uma das planilhas.", vbExclamation
+    Set wbOrigem = Workbooks.Open(caminhoOrigem, ReadOnly:=True)
+    If wbOrigem Is Nothing Then
+        MsgBox "Erro ao abrir a planilha de origem.", vbCritical
         Exit Sub
     End If
+    On Error GoTo 0
 
-    For i = LBound(intervalos) To UBound(intervalos)
-        cols = intervalos(i)(0)
-        linInicio = intervalos(i)(1)
-        linFim = intervalos(i)(2)
+    Dim wbDestino As Workbook: Set wbDestino = ThisWorkbook
 
-        For Each subCol In Split(cols, ",")
-            colStr = Trim(subCol)
-            On Error Resume Next
-            Set rngOrigem = wsOrigem.Range(colStr & linInicio & ":" & colStr & linFim)
-            On Error GoTo 0
+    ' === Copiar dados entre planilhas ===
+    ' Anexo 01
+    CopiarLinhas wbOrigem.Sheets("RREO-Anexo 01"), wbDestino.Sheets("RREO-Anexo 01"), _
+        Array(Array(21, 98, Array("B", "C", "D", "F")), _
+              Array(107, 129, Array("B", "C", "D", "E", "G", "H", "J", "K")), _
+              Array(139, 201, Array("B", "C", "D", "F")), _
+	      Array(210, 219, Array("B", "C", "D", "E", "G", "H", "J", "K")))
 
-            If Not rngOrigem Is Nothing Then
-                For Each cel In rngOrigem.Cells
-                    If IsEmpty(wsDestino.Cells(cel.Row, cel.Column).Value) Then
-                        wsDestino.Cells(cel.Row, cel.Column).Value = cel.Value
-                    End If
-                Next cel
-                Set rngOrigem = Nothing
-            End If
-        Next subCol
+    ' Anexo 02
+    CopiarLinhas wbOrigem.Sheets("RREO-Anexo 02"), wbDestino.Sheets("RREO-Anexo 02"), _
+        Array(Array(19, 212, Array("B", "C", "D", "E", "H", "I", "L")), _
+              Array(221, 413, Array("B", "C", "D", "E", "H", "I", "L")))
+
+
+    ' Anexo 03
+    CopiarLinhas wsOrigem:=wbOrigem.Sheets("RREO-Anexo 03"), wsDestino:=wbDestino.Sheets("RREO-Anexo 03"), _
+                 intervalo:=Array(Array(21, 55, Array("B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O")))
+
+    ' Anexo 04
+    CopiarLinhas wsOrigem:=wbOrigem.Sheets("RREO-Anexo 04"), wsDestino:=wbDestino.Sheets("RREO-Anexo 04"), _
+                 intervalo:=Array(Array(20, 42, Array("B", "C")), _
+                                 Array(51, 58, Array("B", "C", "D", "E", "F")), _
+                                 Array(67, 67, Array("B")), _
+                                 Array(76, 76, Array("B")), _
+                                 Array(85, 88, Array("B")), _
+                                 Array(97, 99, Array("B")), _
+                                 Array(108, 129, Array("B", "C")), _
+                                 Array(138, 145, Array("B", "C", "D", "E", "F")), _
+                                 Array(154, 155, Array("B")), _
+                                 Array(164, 166, Array("B")), _
+                                 Array(175, 176, Array("B", "C")), _
+                                 Array(185, 190, Array("B", "C", "D", "E", "F")), _
+                                 Array(199, 201, Array("B")), _
+                                 Array(210, 212, Array("B", "C")), _
+                                 Array(221, 225, Array("B", "C", "D", "E", "F")))
+
+    ' Anexo 06
+    CopiarLinhas wsOrigem:=wbOrigem.Sheets("RREO-Anexo 06"), wsDestino:=wbDestino.Sheets("RREO-Anexo 06"), _
+                 intervalo:=Array(Array(21, 63, Array("B", "C")), _
+                                 Array(74, 94, Array("B", "C", "D", "E", "F", "G", "H")), _
+                                 Array(103, 104, Array("B", "C")), _
+                                 Array(113, 113, Array("B")), _
+                                 Array(122, 123, Array("B")), _
+                                 Array(132, 132, Array("B")), _
+                                 Array(141, 148, Array("B", "C")), _
+                                 Array(157, 157, Array("B")), _
+                                 Array(166, 166, Array("B")), _
+                                 Array(175, 181, Array("B")), _
+                                 Array(190, 190, Array("B")), _
+                                 Array(199, 202, Array("B")))
+
+    ' Anexo 07
+    CopiarLinhas wsOrigem:=wbOrigem.Sheets("RREO-Anexo 07"), wsDestino:=wbDestino.Sheets("RREO-Anexo 07"), _
+                 intervalo:=Array(Array(22, 28, Array("B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M")), _
+                                 Array(39, 43, Array("B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M")))
+
+    ' Anexo 14
+    CopiarLinhas wsOrigem:=wbOrigem.Sheets("RREO-Anexo 14"), wsDestino:=wbDestino.Sheets("RREO-Anexo 14"), _
+                 intervalo:=Array(Array(20, 32, Array("B")), _
+                                 Array(41, 42, Array("B")), _
+                                 Array(51, 53, Array("B")), _
+                                 Array(62, 73, Array("B")), _
+                                 Array(82, 83, Array("B", "C", "D")), _
+                                 Array(92, 104, Array("B", "C", "D", "E")), _
+                                 Array(114, 117, Array("B", "C", "D")), _
+                                 Array(126, 127, Array("B", "C")), _
+                                 Array(136, 143, Array("B", "C", "D", "E")), _
+                                 Array(152, 153, Array("B", "C")), _
+                                 Array(163, 163, Array("B", "C", "D")), _
+                                 Array(172, 172, Array("B")))
+
+    ' Fecha a planilha de origem
+    wbOrigem.Close SaveChanges:=False
+
+    ' === Preencher fórmulas nos Anexos ===
+    Call PreencherFormulasAnexos
+
+    MsgBox "Planilha Copiada com sucesso.", vbInformation
+End Sub
+
+Sub PreencherFormulasAnexos()
+    Dim ws1 As Worksheet: Set ws1 = ThisWorkbook.Sheets("RREO-Anexo 01")
+    Dim ws2 As Worksheet: Set ws2 = ThisWorkbook.Sheets("RREO-Anexo 02")
+    Dim i As Long
+
+    ' Anexo 01 - Coluna E, G, H, F, I
+    For i = 21 To 98
+        ws1.Cells(i, "E").Formula = "=D" & i & "/C" & i & "*100"
+        ws1.Cells(i, "G").Formula = "=F" & i & "/C" & i & "*100"
+        If IsEmpty(ws1.Cells(i, "H")) Then ws1.Cells(i, "H").Formula = "=C" & i & "-F" & i
     Next i
+
+    For i = 139 To 201
+        ws1.Cells(i, "E").Formula = "=D" & i & "/C" & i & "*100"
+        ws1.Cells(i, "G").Formula = "=F" & i & "/C" & i & "*100"
+        If IsEmpty(ws1.Cells(i, "H")) Then ws1.Cells(i, "H").Formula = "=C" & i & "-F" & i
+    Next i
+
+    For i = 107 To 129
+        If IsEmpty(ws1.Cells(i, "F")) Then ws1.Cells(i, "F").Formula = "=C" & i & "-E" & i
+        If IsEmpty(ws1.Cells(i, "I")) Then ws1.Cells(i, "I").Formula = "=C" & i & "-H" & i
+    Next i
+
+    For i = 210 To 219
+        If IsEmpty(ws1.Cells(i, "F")) Then ws1.Cells(i, "F").Formula = "=C" & i & "-E" & i
+        If IsEmpty(ws1.Cells(i, "I")) Then ws1.Cells(i, "I").Formula = "=C" & i & "-H" & i
+    Next i
+
+    ' Anexo 02 - Fórmulas F, G, J, K
+    For i = 19 To 212
+        If IsEmpty(ws2.Cells(i, "F")) Then ws2.Cells(i, "F").FormulaLocal = "=ARRED(E" & i & "/$E$213*100;2)"
+        If IsEmpty(ws2.Cells(i, "G")) Then ws2.Cells(i, "G").Formula = "=C" & i & "-E" & i
+        If IsEmpty(ws2.Cells(i, "J")) Then ws2.Cells(i, "J").FormulaLocal = "=ARRED(I" & i & "/$I$213*100;2)"
+        If IsEmpty(ws2.Cells(i, "K")) Then ws2.Cells(i, "K").Formula = "=C" & i & "-I" & i
+    Next i
+
+    For i = 221 To 413
+        If IsEmpty(ws2.Cells(i, "F")) Then ws2.Cells(i, "F").FormulaLocal = "=ARRED(E" & i & "/$E$213*100;2)"
+        If IsEmpty(ws2.Cells(i, "G")) Then ws2.Cells(i, "G").Formula = "=C" & i & "-E" & i
+        If IsEmpty(ws2.Cells(i, "J")) Then ws2.Cells(i, "J").FormulaLocal = "=ARRED(I" & i & "/$I$213*100;2)"
+        If IsEmpty(ws2.Cells(i, "K")) Then ws2.Cells(i, "K").Formula = "=C" & i & "-I" & i
+    Next i
+End Sub
+
+Sub CopiarLinhas(wsOrigem As Worksheet, wsDestino As Worksheet, intervalo As Variant)
+    Dim i As Long, j As Long
+    Dim linhaIni As Long, linhaFim As Long
+    Dim colunas As Variant, letra As Variant
+
+    For j = LBound(intervalo) To UBound(intervalo)
+        linhaIni = intervalo(j)(0)
+        linhaFim = intervalo(j)(1)
+        colunas = intervalo(j)(2)
+
+        For i = linhaIni To linhaFim
+            For Each letra In colunas
+                If IsEmpty(wsDestino.Range(letra & i)) Then
+                    wsDestino.Range(letra & i).Value = wsOrigem.Range(letra & i).Value
+                End If
+            Next letra
+        Next i
+    Next j
 End Sub
