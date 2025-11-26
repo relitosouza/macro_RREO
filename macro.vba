@@ -1,6 +1,6 @@
 Sub UnificarMacroRREO()
     Dim caminhoOrigem As String
-    caminhoOrigem = "C:\caminho\para\planilha_auditoria.xls" ' <<< AJUSTE AQUI O CAMINHO CORRETO, depois delete essa frase>>>
+    caminhoOrigem = "C:\caminho\para\planilha_auditoria.xls" ' <<< AJUSTE AQUI O CAMINHO CORRETO
 
     ' Abrir a planilha de origem
     Dim wbOrigem As Workbook
