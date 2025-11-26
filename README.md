@@ -71,7 +71,7 @@ Para o funcionamento correto, mantenha a seguinte estrutura de diretórios:
 📁 Pasta do Projeto/
 ├── 📊 planilha_auditoria.xls        <-- Origem dos dados
 ├── 🎯 SICONFI_RREO_XXXX_BASE.xls    <-- Destino (Oficial)
-├── 🛠️ macro_rreo.vba                <-- Código Fonte
+├── 🛠️ macro_rreo                    <-- Código Fonte
 └── 📖 README.md
 ```
 
